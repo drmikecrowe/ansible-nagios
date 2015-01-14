@@ -29,6 +29,9 @@ nagios_packages:
   - python-passlib
   - libwww-perl
   - libcrypt-ssleay-perl
+  - libssl-dev
+
+
 
 nagios_legacy_packages:
   - libperl5.14
