@@ -64,6 +64,11 @@
   sudo: true
   command: "checkinstall --install=no --pkgname=nagios-exfoliation --requires='perl,libc6' --default make install-exfoliation chdir={{nagios_build_directory}}/nagios-{{nagios_version}}"
 
+- name: check that deb file is present
+  stat: nagios-exfoliation_{{nagios_version}}-1_{{ansible_userspace_architecture}}.deb
+  register: deb_present
+
 - name: install exfoliation
   sudo: true
   command: "dpkg --force-overwrite -i nagios-exfoliation_{{nagios_version}}-1_{{ansible_userspace_architecture}}.deb chdir={{nagios_build_directory}}/nagios-{{nagios_version}}"
+  when: deb_present
