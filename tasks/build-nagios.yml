@@ -66,4 +66,4 @@
 
 - name: install exfoliation
   sudo: true
-  command: "dpkg --force-overwrite -i nagios-exfoliation_{{nagios_version}}-1_amd64.deb chdir={{nagios_build_directory}}/nagios-{{nagios_version}}"
+  command: "dpkg --force-overwrite -i nagios-exfoliation_{{nagios_version}}-1_{{ansible_userspace_architecture}}.deb chdir={{nagios_build_directory}}/nagios-{{nagios_version}}"
