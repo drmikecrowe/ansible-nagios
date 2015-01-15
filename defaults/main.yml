@@ -49,6 +49,8 @@ nagios_admin_name: 'Nagios Admin'
 nagios_host: nagios.exmple.com
 nagios_log_directory: /var/log
 
+nagios_use_authentication: 1
+
 nagios_pagerduty_key: xxxxxxxxxxxxxxxxxxxxxx
 nagios_enable_pagerduty_notifications: true
 

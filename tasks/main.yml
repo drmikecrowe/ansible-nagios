@@ -10,6 +10,12 @@
   with_items: nagios_legacy_packages
   when: legacy | default(false)
 
+- name: check current nagios version
+  sudo: true
+  command: '/usr/local/nagios/bin/nagios --version | {{nagios_version}}'
+  ignore_errors: yes
+  register:  current_nagios_version
+
 # Create nagios users and groups.
 - name: create nagios group
   sudo: true
@@ -42,18 +48,22 @@
 # build and install nagios.
 - tasks:
   include: build-nagios.yml
+  when: current_nagios_version|failed
 
 # Build and install nagios check plugins.
 - tasks:
   include: build-plugins.yml
+  when: current_nagios_version|failed
 
 # Build and install nagios remote checks.
 - tasks:
   include: build-nrpe.yml
+  when: current_nagios_version|failed
 
 # Setup apache.
 - tasks:
   include: apache.yml
+  when: current_nagios_version|failed
 
 # Setup pagerduty.
 - tasks:
@@ -72,6 +82,13 @@
     line="enable_flap_detection=0"
     regexp="^enable_flap_detection.*$"
 
+- name: tweak use_authentication
+  sudo: true
+  lineinfile: >
+    dest=/usr/local/nagios/etc/cgi.cfg
+    line="use_authentication={{nagios_use_authentication}}"
+    regexp="^use_authentication.*$"
+
 - name: overwrite contacts.cfg
   sudo: true
   template: >
@@ -89,6 +106,7 @@
     owner=nagios
     group=nagios
     mode=640
+  when: current_nagios_version|failed
 
 - name: restart nagios
   sudo: true
