@@ -5,6 +5,12 @@
     url={{nagios_tarball}}
     sha256sum={{nagios_tarball_sha256sum}}
 
+- name: check current nagios version
+  sudo: true
+  command: '/usr/local/nagios/bin/nagios --version | {{nagios_version}}'
+  ignore_errors: yes
+  register:  current_nagios_version
+
 - name: untar the tarball
   sudo: true
   command: "tar -xvf nagios-{{nagios_version}}.tar.gz chdir={{nagios_build_directory}}"
